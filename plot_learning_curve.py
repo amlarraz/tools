@@ -8,7 +8,7 @@
 during the training of py-faster-rcnn, for use you only need
 to save the script in the root folder of py-faster-rcnn and
 running in the terminal, notice about only works if you train 
-the model use the faster_rcnn_end2end.sh script. 
+the model with the faster_rcnn_end2end.sh script. 
 
 Enjoy!'''
 
@@ -89,7 +89,7 @@ for i in range(len(lines_output)):
 
 output.close()
 
-#Delete de auxiliar file prueba_output.txt:
+#Delete the auxiliar file prueba_output.txt:
 
 command = 'rm prueba_output.txt'
 process = subprocess.Popen(command, shell=True, stdout=subprocess.PIPE)
