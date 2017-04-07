@@ -21,12 +21,7 @@ laplacian=cv2.imread('Laplacian.png')
 
 #Change the color of the edges:
 
-
-for i in range(laplacian.shape[0]):
-	for j in range(laplacian.shape[1]):
-		if (laplacian[i][j]==[0,0,255]).all():
-			laplacian[i][j]=[255,255,0]
-
+laplacian[laplacian[:,:,2]==255] = [255,255, 0]
 
 #Overlap images: (output1 & 2 original+edge, output3 orig+completly mask)
 
