@@ -8,8 +8,8 @@ import argparse
 TEST_FILE = '/home/poto/Escritorio/DATASETS/GRAPES/ImageSets/Main/test_old.txt'
 IMG_DIR = '/home/poto/Escritorio/DATASETS/GRAPES/JPEGImages/'
 
-INFER_FASTER = '/home/poto/Escritorio/R-FCN/py-R-FCN/tools/infer_grapes.py'
-WEIGHTS_FASTER = '/home/poto/Escritorio/R-FCN/py-R-FCN/output/rfcn_end2end_ohem/grapes_trainval/resnet50_rfcn_ohem_iter_60000.caffemodel'
+INFER_FASTER = '/home/poto/py-faster-rcnn/tools/infer_grapes.py'
+WEIGHTS_FASTER = '/home/poto/py-faster-rcnn/output/faster_rcnn_end2end/grapes_trainval/vgg16_faster_rcnn_iter_70000.caffemodel'
 
 INFER_DEEPLABV2 = '/home/poto/Escritorio/deeplabv2/TF/tensorflow-deeplab-resnet/inference.py'
 WEIGHTS_DEEPLABV2 = '/home/poto/Escritorio/deeplabv2/TF/tensorflow-deeplab-resnet/models/grapes/snapshots_finetune/model.ckpt-20000'
@@ -56,21 +56,40 @@ def main():
     if not os.path.exists(args.save_dir):
     	os.mkdir(args.save_dir)
 	os.mkdir(args.save_dir+'results_faster')
+	os.mkdir(args.save_dir+'crops')
 	os.mkdir(args.save_dir+'results_deeplabv2')
     
     ################# Inference from Faster-RCNN ####################################
 
-#    os.system('python '+args.infer_faster+' --net '+args.weights_faster+' --imgfolder '+args.img_dir+' --outfolder '+args.save_dir+'results_faster --imgsetfile '+args.test_file)
-		
+    os.system('python '+args.infer_faster+' --net '+args.weights_faster+' --imgfolder '+args.img_dir+' --outfolder '+args.save_dir+'results_faster --imgsetfile '+args.test_file)
+
+    bboxes_file = open(args.save_dir+'results_faster/bboxes.txt', 'r')
+    bboxes_list = bboxes_file.readlines()
+    
+    ################# Crop the images to obtain only the areas with detection #######
+	
+    for i in range(len(test_list)):
+	for j in range(len(bboxes_list)):
+    		if bboxes_list[j][:bboxes_list[j].find(' ')].replace('.jpg','') == test_list[i].replace('\n',''):
+			
+			x_min = int(bboxes_list[j].split(' ')[2].split('.')[0])
+			y_min = int(bboxes_list[j].split(' ')[3].split('.')[0])
+			x_max = int(bboxes_list[j].split(' ')[4].split('.')[0])
+			y_max = int(bboxes_list[j].split(' ')[5].split('.')[0])
+			
+			full_img = cv2.imread(args.img_dir+test_list[i].replace('\n','')+'.jpg')
+			crop = full_img[y_min:y_max,x_min:x_max ,:] #OJO AL CROPEO
+			cv2.imwrite(args.save_dir+'crops/'+test_list[i].replace('\n','')+'_'+str(j)+'.jpg',crop)
+
     ################# Inference from DeepLabV2 ######################################
 
-#    for i in range(len(test_list)):
-#    	os.system('python '+args.infer_deeplabv2+' '+args.img_dir+test_list[i].replace('\n','')+'.jpg '+args.weights_deeplabv2+' --save-dir '+args.save_dir+'results_deeplabv2/')
+    for i in range(len(test_list)):
+    	os.system('python '+args.infer_deeplabv2+' '+args.img_dir+test_list[i].replace('\n','')+'.jpg '+args.weights_deeplabv2+' --save-dir '+args.save_dir+'results_deeplabv2/')
 
     ################# Overlap image and segmentation ################################
 
     for i in range(len(test_list)):
-    	
+		
 	#Open images:
 	
 	orig = cv2.imread(args.img_dir+test_list[i].replace('\n','')+'.jpg')
@@ -100,9 +119,6 @@ def main():
 	os.system('rm '+args.save_dir+'results_deeplabv2/Laplacian.png')
 
     	################ Draw Bboxes ################################################
-	
-	bboxes_file = open(args.save_dir+'results_faster/bboxes.txt', 'r')
-	bboxes_list = bboxes_file.readlines()
 	
 	for j in range(len(bboxes_list)):
 		if bboxes_list[j][:bboxes_list[j].find(' ')].replace('.jpg','') == test_list[i].replace('\n',''):
