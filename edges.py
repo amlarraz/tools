@@ -8,8 +8,8 @@ import argparse
 TEST_FILE = '/home/poto/Escritorio/DATASETS/GRAPES/ImageSets/Main/test_old.txt'
 IMG_DIR = '/home/poto/Escritorio/DATASETS/GRAPES/JPEGImages/'
 
-INFER_FASTER = '/home/poto/py-faster-rcnn/tools/infer_grapes.py'
-WEIGHTS_FASTER = '/home/poto/py-faster-rcnn/output/faster_rcnn_end2end/grapes_trainval/vgg16_faster_rcnn_iter_70000.caffemodel'
+INFER_FASTER = '/home/poto/Escritorio/R-FCN/py-R-FCN/tools/infer_grapes.py'
+WEIGHTS_FASTER = '/home/poto/Escritorio/R-FCN/py-R-FCN/output/rfcn_end2end_ohem/grapes_trainval/resnet50_rfcn_ohem_iter_60000.caffemodel'
 
 INFER_DEEPLABV2 = '/home/poto/Escritorio/deeplabv2/TF/tensorflow-deeplab-resnet/inference.py'
 WEIGHTS_DEEPLABV2 = '/home/poto/Escritorio/deeplabv2/TF/tensorflow-deeplab-resnet/models/grapes/snapshots_finetune/model.ckpt-20000'
