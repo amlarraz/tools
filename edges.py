@@ -66,21 +66,6 @@ def main():
     bboxes_file = open(args.save_dir+'results_faster/bboxes.txt', 'r')
     bboxes_list = bboxes_file.readlines()
     
-    ################# Crop the images to obtain only the areas with detection #######
-	
-    for i in range(len(test_list)):
-	for j in range(len(bboxes_list)):
-    		if bboxes_list[j][:bboxes_list[j].find(' ')].replace('.jpg','') == test_list[i].replace('\n',''):
-			
-			x_min = int(bboxes_list[j].split(' ')[2].split('.')[0])
-			y_min = int(bboxes_list[j].split(' ')[3].split('.')[0])
-			x_max = int(bboxes_list[j].split(' ')[4].split('.')[0])
-			y_max = int(bboxes_list[j].split(' ')[5].split('.')[0])
-			
-			full_img = cv2.imread(args.img_dir+test_list[i].replace('\n','')+'.jpg')
-			crop = full_img[y_min:y_max,x_min:x_max ,:] #OJO AL CROPEO
-			cv2.imwrite(args.save_dir+'crops/'+test_list[i].replace('\n','')+'_'+str(j)+'.jpg',crop)
-
     ################# Inference from DeepLabV2 ######################################
 
     for i in range(len(test_list)):
