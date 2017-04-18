@@ -138,7 +138,7 @@ def main():
 					full_img[y_min:y_max,x_min:x_max ,:] = output_edge
 					cv2.rectangle(full_img,(x_min,y_min),(x_max,y_max),(6,24,207),3)
     	
-			cv2.imwrite(args.save_dir+crops[i][:crops[i].find('_')]+'_edges.jpg',full_img)	
+			cv2.imwrite(args.save_dir+crops[k][:crops[k].find('_')]+'_edges.jpg',full_img)	
 					
 			# Remove the Edge image:
 
