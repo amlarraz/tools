@@ -131,9 +131,17 @@ def main():
 					y_max = int(bboxes_list[j].split(' ')[5].split('.')[0])
 				
 					full_img[y_min:y_max,x_min:x_max ,:] = output_edge
-					cv2.rectangle(full_img,(x_min,y_min),(x_max,y_max),(6,24,207),3)
-    	
-			cv2.imwrite(args.save_dir+crops[k][:crops[k].find('_')]+'_edges.jpg',full_img)	
+					
+	for j in range(len(bboxes_list)):
+		if test_list[i] == bboxes_list[j][:bboxes_list[j].find(' ')].replace('.jpg',''):
+    					
+			x_min = int(bboxes_list[j].split(' ')[2].split('.')[0])
+			y_min = int(bboxes_list[j].split(' ')[3].split('.')[0])
+			x_max = int(bboxes_list[j].split(' ')[4].split('.')[0])
+			y_max = int(bboxes_list[j].split(' ')[5].split('.')[0])
+			cv2.rectangle(full_img,(x_min,y_min),(x_max,y_max),(6,24,207),3)
+	
+	cv2.imwrite(args.save_dir+test_list[i]+'_edges.jpg',full_img)	
 					
 			
     print ''
