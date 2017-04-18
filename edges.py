@@ -63,9 +63,6 @@ def main():
 
     os.system('python '+args.infer_faster+' --net '+args.weights_faster+' --imgfolder '+args.img_dir+' --outfolder '+args.save_dir+'results_faster --imgsetfile '+args.test_file)
 
-    bboxes_file = open(args.save_dir+'results_faster/bboxes.txt', 'r')
-    bboxes_list = bboxes_file.readlines()
-    
     ################# Inference from DeepLabV2 ######################################
 
     for i in range(len(test_list)):
@@ -100,11 +97,13 @@ def main():
         output_mask=cv2.addWeighted(orig,1,mask,0.6,0)
 	
 	# Remove the Edge image:
-
+	
 	os.system('rm '+args.save_dir+'results_deeplabv2/Laplacian.png')
 
     	################ Draw Bboxes ################################################
 	
+	bboxes_file = open(args.save_dir+'results_faster/bboxes.txt', 'r')
+    	bboxes_list = bboxes_file.readlines()
 	for j in range(len(bboxes_list)):
 		if bboxes_list[j][:bboxes_list[j].find(' ')].replace('.jpg','') == test_list[i].replace('\n',''):
 			
@@ -114,11 +113,15 @@ def main():
 			y_max = int(bboxes_list[j].split(' ')[5].split('.')[0])
 			output_edge = cv2.rectangle(output_edge,(x_min,y_min),(x_max,y_max),(6,24,207),3)
     		    	output_mask = cv2.rectangle(output_mask,(x_min,y_min),(x_max,y_max),(6,24,207),3)
-    			print test_list[i].replace('\n','')+'.jpg is Done'
+    			
     	#Save the outputs:
 
     	cv2.imwrite(args.save_dir+test_list[i].replace('\n','')+'_edges.jpg',output_edge)
     	cv2.imwrite(args.save_dir+test_list[i].replace('\n','')+'_mask.jpg',output_mask)
-	
+
+    print ''
+    print 'All is done :)'
+    print ''
+
 if __name__ == "__main__":
     main()
