@@ -63,7 +63,7 @@ def main():
 
     ################# Inference from Faster-RCNN ####################################
 
-    #os.system('python '+args.infer_faster+' --net '+args.weights_faster+' --imgfolder '+args.img_dir+' --outfolder '+args.save_dir+'results_faster --imgsetfile '+args.test_file)
+    os.system('python '+args.infer_faster+' --net '+args.weights_faster+' --imgfolder '+args.img_dir+' --outfolder '+args.save_dir+'results_faster --imgsetfile '+args.test_file)
 
     ################# Crop the images to obtain only the areas with detection #######    
 
@@ -88,8 +88,8 @@ def main():
 
     crops = os.listdir(args.save_dir+'crops')
     
-    #for i in range(len(crops)):
-    #	os.system('python '+args.infer_deeplabv2+' '+args.save_dir+'crops/'+crops[i]+' '+args.weights_deeplabv2+' --save-dir '+args.save_dir+'results_deeplabv2/')
+    for i in range(len(crops)):
+    	os.system('python '+args.infer_deeplabv2+' '+args.save_dir+'crops/'+crops[i]+' '+args.weights_deeplabv2+' --save-dir '+args.save_dir+'results_deeplabv2/')
 
     ################# Overlap image and segmentation ################################
 
